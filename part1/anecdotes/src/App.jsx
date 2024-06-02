@@ -35,12 +35,25 @@ const App = () => {
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled) // The maximum is exclusive and the minimum is inclusive
   }
 
+  const getMostVoted = () => {
+    let mostVoted = 0
+    for(const p in points ) {
+      if (points[p] > points[mostVoted]) {                
+        mostVoted = p
+      }
+    }
+    console.log("Most voted: ", mostVoted)
+    return mostVoted
+  }
+
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      <h3>{anecdotes[selected]}</h3>
       <p>Has {points[selected]} votes</p>
       <button onClick={handleClick}>Next anecdote</button>
       <button onClick={handleVote}>Vote</button>
+      <h4>Anecdote with most votes</h4>
+      <p>{anecdotes[getMostVoted()]}</p>
     </div>
   )
 }
