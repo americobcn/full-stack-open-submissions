@@ -13,10 +13,20 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState({'0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0,})
+
   console.log("selected: ", selected)
+  console.log("points: ", points)
+
   const handleClick = () => {
     const newSelected = getRandomInt(0, anecdotes.length)
     setSelected(newSelected)
+  }
+
+  const handleVote = () => {
+    const votes = { ...points }
+    votes[selected] += 1
+    setPoints(votes)
   }
 
   const getRandomInt = (min, max) => {
@@ -28,7 +38,9 @@ const App = () => {
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>Has {points[selected]} votes</p>
       <button onClick={handleClick}>Next anecdote</button>
+      <button onClick={handleVote}>Vote</button>
     </div>
   )
 }
