@@ -1,0 +1,23 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 20px 0 20px;
+}
+
+.success {
+  padding: 5px;
+  margin: 5px;
+  border: 2px solid green;
+  border-radius: 3%;
+  background-color: rgb(142, 235, 142);
+  color: rgb(2, 92, 2);
+}
+
+.failed {
+  padding: 5px;
+  margin: 5px;
+  border: 2px solid red;
+  border-radius: 3%;
+  background-color: rgb(255, 160, 160);
+  color: rgb(166, 0, 0);
+}

@@ -1,6 +1,24 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personsService from "./services/persons"
+
+const Notification = ({ successMessage, errorMessage }) => {
+  if (successMessage) {
+    return (
+      <div className="success">
+        {successMessage}
+      </div>
+    )
+  } else if (errorMessage) {
+    return (
+      <div className="failed">
+        {errorMessage}
+      </div>
+    )
+  } else {
+    return null
+  }
+  
+}
 
 const Filter = (props) => {
   return (
@@ -51,6 +69,9 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('What\'s your phone number?')
   const [personsFiltered, setPersonsFiltered] = useState(persons)
   const [filter, setFilter] = useState(false)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
 
   useEffect(() => {
     console.log("Effect");
@@ -80,16 +101,24 @@ const App = () => {
           .then(returnedPerson => {
             console.log(returnedPerson)
             setPersons(persons.map(p => p.id !== existingPerson.id ? p : returnedPerson))
+            setSuccessMessage(`Succesfully updated ${returnedPerson.name}`)
+            setTimeout(() => setSuccessMessage(null), 2500)
           })
-      } else {
+          .catch(error => setErrorMessage(`Information about ${existingPerson.name} 
+            has already been removed from server`))
+          setTimeout(() => setErrorMessage(null), 2500)
+          setPersons(persons.filter(p => p.id !== existingPerson.id))
+        } else {
         return
       }
     } else {
       personsService
         .createPerson(newPerson)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+        setSuccessMessage(`Succesfully added ${newPerson.name}`)
+        setTimeout(() => setSuccessMessage(null), 2500)
     }
-    
+  
     setNewName("")
     setNewPhone("")
   }
@@ -103,6 +132,8 @@ const App = () => {
         .then(returnedPerson => {
           console.log(returnedPerson)
           setPersons(persons.filter(p => p.id !== returnedPerson.id))
+          setSuccessMessage(`Succesfully deleted ${returnedPerson.name}`)
+          setTimeout(() => setSuccessMessage(null), 2500)
         })
     }
   }
@@ -130,9 +161,9 @@ const App = () => {
 
   return (
     <div>
+      <Notification successMessage={successMessage} errorMessage={errorMessage}/>
       <h2>Phonebook</h2>
       <Filter onFilterChange={handleFilterChange}/>
-     
       <h3>Add new contact</h3>
       <PersonForm name={newName} 
                   phone={newPhone} 
